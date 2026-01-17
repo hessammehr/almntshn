@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>almntshn</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>almntshn</h1>
+    </header>
+
+    <main>
+        <!-- Tab Navigation -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="scan">Scan</button>
+            <button class="tab" data-tab="inventory">Inventory</button>
+        </nav>
+
+        <!-- Scan Tab -->
+        <section id="scan-tab" class="tab-content active">
+            <div id="scanner-container">
+                <div id="reader"></div>
+                <p class="scanner-hint">Point camera at barcode</p>
+            </div>
+
+            <div id="scan-result" class="hidden">
+                <div id="result-content"></div>
+                <div id="result-actions"></div>
+            </div>
+
+            <div class="manual-entry">
+                <input type="text" id="manual-barcode" placeholder="Or enter barcode manually">
+                <button id="manual-lookup" class="btn">Look up</button>
+            </div>
+        </section>
+
+        <!-- Inventory Tab -->
+        <section id="inventory-tab" class="tab-content hidden">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search items...">
+            </div>
+            
+            <div id="inventory-list"></div>
+        </section>
+    </main>
+
+    <!-- Modal for adding/editing items -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="modal-title">Add Item</h2>
+            <form id="item-form">
+                <input type="hidden" id="form-barcode">
+                
+                <label for="form-name">Name *</label>
+                <input type="text" id="form-name" required>
+                
+                <label for="form-brand">Brand</label>
+                <input type="text" id="form-brand">
+                
+                <label for="form-quantity">Quantity</label>
+                <input type="number" id="form-quantity" value="1" min="0" step="1">
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                    <button type="submit" class="btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/scanner.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

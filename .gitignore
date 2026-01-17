@@ -1,0 +1,16 @@
+# Dependencies
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Database
+data/*.db
+
+# OS files
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+.idea/
+.vscode/

@@ -1,0 +1,376 @@
+/* Reset and base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --text: #111111;
+    --text-secondary: #555555;
+    --border: #222222;
+    --accent: #000000;
+    --success: #006600;
+    --warning: #cc6600;
+    --danger: #cc0000;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Header */
+header {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 1rem;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+}
+
+.tab {
+    flex: 1;
+    padding: 1rem;
+    background: var(--bg);
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.tab.active {
+    border-bottom-color: var(--accent);
+}
+
+.tab-content {
+    padding: 1rem;
+}
+
+.tab-content.hidden {
+    display: none;
+}
+
+/* Scanner */
+#scanner-container {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+#reader {
+    width: 100%;
+}
+
+.scanner-hint {
+    text-align: center;
+    padding: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Scan Result */
+#scan-result {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+#scan-result.hidden {
+    display: none;
+}
+
+.result-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.result-image {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.result-info {
+    flex: 1;
+}
+
+.result-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.result-brand {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.result-quantity {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.result-quantity.in-stock {
+    color: var(--success);
+}
+
+.result-quantity.out-of-stock {
+    color: var(--danger);
+}
+
+.result-new {
+    text-align: center;
+    padding: 1rem;
+}
+
+.result-new p {
+    margin-bottom: 0.5rem;
+}
+
+.result-barcode {
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#result-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Manual entry */
+.manual-entry {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.manual-entry input {
+    flex: 1;
+}
+
+/* Buttons */
+.btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: 2px solid var(--accent);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background: var(--bg);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.btn-success {
+    background: var(--success);
+    border-color: var(--success);
+}
+
+.btn-danger {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    min-width: 44px;
+    font-size: 1.2rem;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="number"] {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Search bar */
+.search-bar {
+    margin-bottom: 1rem;
+}
+
+.search-bar input {
+    width: 100%;
+}
+
+/* Inventory list */
+#inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.inventory-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+}
+
+.inventory-item-image {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.inventory-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.inventory-item-name {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.inventory-item-brand {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.inventory-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-display {
+    font-size: 1.25rem;
+    font-weight: 700;
+    min-width: 2rem;
+    text-align: center;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+}
+
+.empty-state p {
+    margin-bottom: 0.5rem;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 200;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.modal-content h2 {
+    margin-bottom: 1rem;
+}
+
+.modal-content label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    margin-top: 0.75rem;
+}
+
+.modal-content input {
+    width: 100%;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    justify-content: flex-end;
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+/* Loading state */
+.loading {
+    opacity: 0.5;
+    pointer-events: none;
+}

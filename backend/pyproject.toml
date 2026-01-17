@@ -1,0 +1,15 @@
+[project]
+name = "almntshn"
+version = "0.1.0"
+description = "Home food inventory tracker"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "sqlalchemy>=2.0.0",
+    "pydantic>=2.0.0",
+    "httpx>=0.26.0",
+]
+
+[dependency-groups]
+dev = []
