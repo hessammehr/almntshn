@@ -1,7 +1,12 @@
 .PHONY: serve serve-ts dev clean reset-db help ip
 
-# Tailscale CLI path (macOS app location)
-TAILSCALE := /Applications/Tailscale.app/Contents/MacOS/Tailscale
+# Detect OS and set Tailscale CLI path
+UNAME := $(shell uname -s)
+ifeq ($(UNAME),Darwin)
+    TAILSCALE := /Applications/Tailscale.app/Contents/MacOS/Tailscale
+else
+    TAILSCALE := tailscale
+endif
 
 # Get Tailscale hostname
 TS_HOST := $(shell $(TAILSCALE) status --json 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['Self']['DNSName'].rstrip('.'))" 2>/dev/null || echo "your-hostname.ts.net")
