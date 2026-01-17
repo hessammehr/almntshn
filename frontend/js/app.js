@@ -46,11 +46,15 @@ function switchTab(tabName) {
 
 // Scanner handling
 async function startScanner() {
+    const hint = document.getElementById('scanner-hint');
+    hint.textContent = 'Starting camera...';
+    
     try {
         await scanner.start(handleScan);
+        hint.textContent = 'Point camera at barcode';
     } catch (err) {
         console.error('Failed to start scanner:', err);
-        // Show manual entry as fallback
+        hint.textContent = 'Camera error - use manual entry';
     }
 }
 
