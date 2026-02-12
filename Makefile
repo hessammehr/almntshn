@@ -23,6 +23,7 @@ help:
 	@echo "  dev       Alias for serve"
 	@echo "  clean     Remove Python cache files"
 	@echo "  reset-db  Delete database and start fresh"
+	@echo "  backfill-categories  Fetch OFF categories for items missing them"
 	@echo "  ip        Show access URLs"
 
 # Start development server with auto-reload (HTTP only)
@@ -68,3 +69,8 @@ clean:
 reset-db:
 	rm -f data/inventory.db
 	@echo "Database deleted. Will be recreated on next server start."
+
+# Backfill OFF categories for existing items
+backfill-categories:
+	cd backend && uv run python scripts/backfill_categories.py --force
+

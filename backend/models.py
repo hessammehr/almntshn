@@ -12,7 +12,7 @@ class Item(Base):
     barcode = Column(String, unique=True, index=True, nullable=False)
     name = Column(String, nullable=False)
     brand = Column(String, nullable=True)
-    category = Column(String, nullable=True)
+    category = Column(String, nullable=True)  # mid-level OFF category tag for similarity matching
     image_url = Column(String, nullable=True)
     unit = Column(String, default="pcs")  # pcs, g, kg, ml, L
     created_at = Column(DateTime, server_default=func.now())

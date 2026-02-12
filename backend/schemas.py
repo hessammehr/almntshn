@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 
 # Item schemas
@@ -71,8 +71,13 @@ class QuickAddRequest(BaseModel):
 
 
 # Combined response for scan results
+class SimilarItem(BaseModel):
+    item: ItemResponse
+    quantity: float = 0
+
 class ScanResult(BaseModel):
     found_in_inventory: bool
     item: Optional[ItemResponse] = None
     quantity: float = 0
     product_info: Optional[dict] = None  # From Open Food Facts if new
+    similar_items: List[SimilarItem] = []

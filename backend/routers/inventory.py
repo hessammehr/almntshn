@@ -6,11 +6,28 @@ from database import get_db
 from models import Item, Inventory, ScanHistory
 from schemas import (
     InventoryResponse, InventoryUpdate, 
-    ScanRequest, ScanResult, AdjustQuantityRequest, QuickAddRequest
+    ScanRequest, ScanResult, SimilarItem, AdjustQuantityRequest, QuickAddRequest
 )
 from services.openfoodfacts import lookup_barcode
 
 router = APIRouter(prefix="/inventory", tags=["inventory"])
+
+
+def find_similar_items(db: Session, category: str, exclude_item_id: int = None) -> list:
+    """Find inventory items with the same OFF category."""
+    if not category:
+        return []
+
+    query = db.query(Inventory).options(joinedload(Inventory.item)).join(Item).filter(
+        Item.category == category,
+    )
+    if exclude_item_id is not None:
+        query = query.filter(Item.id != exclude_item_id)
+
+    return [
+        SimilarItem(item=inv.item, quantity=inv.quantity)
+        for inv in query.all()
+    ]
 
 
 @router.get("/", response_model=List[InventoryResponse])
@@ -39,6 +56,7 @@ async def scan_barcode(request: ScanRequest, db: Session = Depends(get_db)):
     Scan a barcode to check if we have it.
     Returns item info and current quantity if in inventory.
     If not known, looks up in Open Food Facts.
+    Also returns similar items already in inventory (by shared OFF categories).
     """
     # Log the scan
     scan_log = ScanHistory(barcode=request.barcode, action="check")
@@ -50,18 +68,26 @@ async def scan_barcode(request: ScanRequest, db: Session = Depends(get_db)):
     
     if item:
         inventory = db.query(Inventory).filter(Inventory.item_id == item.id).first()
+        similar = find_similar_items(db, item.category, exclude_item_id=item.id)
         return ScanResult(
             found_in_inventory=True,
             item=item,
-            quantity=inventory.quantity if inventory else 0
+            quantity=inventory.quantity if inventory else 0,
+            similar_items=similar,
         )
     
     # Not in our database - look up in Open Food Facts
     product_info = await lookup_barcode(request.barcode)
     
+    # Even for unknown items, check if we have something similar
+    similar = []
+    if product_info and product_info.get("category"):
+        similar = find_similar_items(db, product_info["category"])
+    
     return ScanResult(
         found_in_inventory=False,
-        product_info=product_info
+        product_info=product_info,
+        similar_items=similar,
     )
 
 

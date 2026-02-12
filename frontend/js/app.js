@@ -87,6 +87,8 @@ async function lookupBarcode(barcode) {
 function showScanResult(result) {
     elements.scanResult.classList.remove('hidden');
     
+    const similarHtml = renderSimilarItems(result.similar_items);
+    
     if (result.found_in_inventory) {
         // Item exists in our system
         const item = result.item;
@@ -103,6 +105,7 @@ function showScanResult(result) {
                     </div>
                 </div>
             </div>
+            ${similarHtml}
         `;
         
         elements.resultActions.innerHTML = `
@@ -127,6 +130,7 @@ function showScanResult(result) {
                         <div class="result-quantity out-of-stock">New item</div>
                     </div>
                 </div>
+                ${similarHtml}
             `;
             
             elements.resultActions.innerHTML = `
@@ -154,6 +158,34 @@ function hideResult() {
     elements.scanResult.classList.add('hidden');
     currentBarcode = null;
     currentProductInfo = null;
+}
+
+function renderSimilarItems(similarItems) {
+    if (!similarItems || similarItems.length === 0) return '';
+    
+    const items = similarItems.map(s => {
+        const item = s.item;
+        const qty = s.quantity;
+        return `
+            <div class="similar-item">
+                ${item.image_url ? `<img src="${item.image_url}" class="similar-item-image" alt="">` : '<div class="similar-item-image"></div>'}
+                <div class="similar-item-info">
+                    <div class="similar-item-name">${escapeHtml(item.name)}</div>
+                    ${item.brand ? `<span class="similar-item-brand">${escapeHtml(item.brand)}</span>` : ''}
+                </div>
+                <div class="similar-item-qty ${qty > 0 ? 'in-stock' : 'out-of-stock'}">
+                    ${qty > 0 ? `${qty}` : '0'}
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    return `
+        <div class="similar-items">
+            <div class="similar-items-header">⚠️ You might already have</div>
+            ${items}
+        </div>
+    `;
 }
 
 async function quickAdd(barcode) {

@@ -393,3 +393,73 @@ input:focus {
     opacity: 0.5;
     pointer-events: none;
 }
+
+/* Similar items */
+.similar-items {
+    margin-top: 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+}
+
+.similar-items-header {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--warning);
+}
+
+.similar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--bg);
+}
+
+.similar-item:last-child {
+    border-bottom: none;
+}
+
+.similar-item-image {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.similar-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.similar-item-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.similar-item-brand {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.similar-item-qty {
+    font-weight: 700;
+    font-size: 1rem;
+    min-width: 2rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.similar-item-qty.in-stock {
+    color: var(--success);
+}
+
+.similar-item-qty.out-of-stock {
+    color: var(--danger);
+}
