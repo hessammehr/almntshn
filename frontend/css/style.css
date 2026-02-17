@@ -286,6 +286,21 @@ header h1 {
     font-size: 1.2rem;
 }
 
+.btn-delete {
+    background: #d32f2f;
+    border: none;
+    color: white;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0.25rem;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Inputs */
 input[type="text"],
 input[type="number"] {

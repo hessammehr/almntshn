@@ -345,6 +345,7 @@ function renderInventory(items) {
                     <div class="inventory-item-name">${escapeHtml(item.name)}</div>
                     ${item.brand ? `<div class="inventory-item-brand">${escapeHtml(item.brand)}</div>` : ''}
                 </div>
+                <button class="btn btn-icon btn-small btn-delete" onclick="deleteAndRefresh(${item.id})" title="Delete item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                 <div class="inventory-item-quantity">
                     <button class="btn btn-icon btn-small" onclick="adjustAndRefresh('${item.barcode}', -1)">−</button>
                     <span class="quantity-display">${inv.quantity}</span>
@@ -361,6 +362,15 @@ async function adjustAndRefresh(barcode, delta) {
         loadInventory(elements.searchInput.value);
     } catch (err) {
         console.error('Adjust error:', err);
+    }
+}
+
+async function deleteAndRefresh(itemId) {
+    try {
+        await api.deleteItem(itemId);
+        loadInventory(elements.searchInput.value);
+    } catch (err) {
+        console.error('Delete error:', err);
     }
 }
 
