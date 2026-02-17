@@ -2,7 +2,6 @@
 
 let currentBarcode = null;
 let currentProductInfo = null;
-let scanCooldown = false;
 
 // DOM elements
 const elements = {
@@ -23,7 +22,8 @@ const elements = {
     formName: document.getElementById('form-name'),
     formBrand: document.getElementById('form-brand'),
     formQuantity: document.getElementById('form-quantity'),
-    modalCancel: document.getElementById('modal-cancel')
+    modalCancel: document.getElementById('modal-cancel'),
+    scanBtn: document.getElementById('scan-btn')
 };
 
 // Tab switching
@@ -37,33 +37,56 @@ function switchTab(tabName) {
     elements.inventoryTab.classList.toggle('hidden', tabName !== 'inventory');
     
     if (tabName === 'scan') {
-        startScanner();
+        startCamera();
     } else {
         scanner.stop();
         loadInventory();
     }
 }
 
-// Scanner handling
-async function startScanner() {
+// Camera & scanner handling
+async function startCamera() {
     const hint = document.getElementById('scanner-hint');
     hint.textContent = 'Starting camera...';
     
     try {
         await scanner.start(handleScan);
-        hint.textContent = 'Point camera at barcode';
+        // Camera is running but scanning is paused until button press
+        scanner.pause();
+        hint.textContent = 'Press the button to scan';
+        elements.scanBtn.classList.remove('hidden');
     } catch (err) {
-        console.error('Failed to start scanner:', err);
+        console.error('Failed to start camera:', err);
         hint.textContent = 'Camera error - use manual entry';
     }
 }
 
-async function handleScan(barcode) {
-    if (scanCooldown) return;
+function startScanning() {
+    if (!scanner.isActive()) return;
     
-    // Prevent rapid repeated scans
-    scanCooldown = true;
-    setTimeout(() => { scanCooldown = false; }, 1500);
+    elements.scanBtn.classList.add('scanning');
+    document.getElementById('scanner-hint').textContent = 'Point camera at barcode...';
+    scanner.resume();
+}
+
+function stopScanning() {
+    elements.scanBtn.classList.remove('scanning');
+    document.getElementById('scanner-hint').textContent = 'Press the button to scan';
+    scanner.pause();
+}
+
+// Scan button
+elements.scanBtn.addEventListener('click', () => {
+    if (elements.scanBtn.classList.contains('scanning')) {
+        stopScanning();
+    } else {
+        startScanning();
+    }
+});
+
+async function handleScan(barcode) {
+    // Got a barcode — stop scanning immediately
+    stopScanning();
     
     // Vibrate on scan (if supported)
     if (navigator.vibrate) {
@@ -154,12 +177,6 @@ function showScanResult(result) {
     }
 }
 
-function hideResult() {
-    elements.scanResult.classList.add('hidden');
-    currentBarcode = null;
-    currentProductInfo = null;
-}
-
 function renderSimilarItems(similarItems) {
     if (!similarItems || similarItems.length === 0) return '';
     
@@ -186,6 +203,12 @@ function renderSimilarItems(similarItems) {
             ${items}
         </div>
     `;
+}
+
+function hideResult() {
+    elements.scanResult.classList.add('hidden');
+    currentBarcode = null;
+    currentProductInfo = null;
 }
 
 async function quickAdd(barcode) {
@@ -351,5 +374,5 @@ function escapeHtml(text) {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    startScanner();
+    startCamera();
 });

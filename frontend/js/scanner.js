@@ -1,8 +1,9 @@
 // Barcode scanner using QuaggaJS
-// Continuous scanning with live detection
+// Scanning controlled by explicit start/stop via scan button
 
 let onScanCallback = null;
 let isScanning = false;
+let isScanEnabled = false;
 let lastResult = null;
 let lastResultTime = 0;
 
@@ -50,11 +51,14 @@ const scanner = {
                 console.log('Quagga initialized');
                 Quagga.start();
                 isScanning = true;
+                isScanEnabled = false;
                 resolve();
             });
             
             // Detection handler
             Quagga.onDetected((result) => {
+                // Ignore detections when scanning is not enabled
+                if (!isScanEnabled) return;
                 if (!result || !result.codeResult) return;
                 
                 const code = result.codeResult.code;
@@ -66,7 +70,6 @@ const scanner = {
                 }
                 
                 // Confidence check - require multiple reads to confirm
-                // QuaggaJS provides error correction info
                 const errors = result.codeResult.decodedCodes
                     ?.filter(x => x.error !== undefined)
                     ?.map(x => x.error) || [];
@@ -92,7 +95,7 @@ const scanner = {
                 }
             });
             
-            // Optional: draw detection boxes for debugging
+            // Draw detection boxes (only when scanning enabled)
             Quagga.onProcessed((result) => {
                 const drawingCtx = Quagga.canvas.ctx.overlay;
                 const drawingCanvas = Quagga.canvas.dom.overlay;
@@ -100,6 +103,8 @@ const scanner = {
                 if (!drawingCtx || !drawingCanvas) return;
                 
                 drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+                
+                if (!isScanEnabled) return;
                 
                 if (result && result.boxes) {
                     result.boxes.filter(box => box !== result.box).forEach(box => {
@@ -123,6 +128,7 @@ const scanner = {
         
         Quagga.stop();
         isScanning = false;
+        isScanEnabled = false;
         lastResult = null;
         
         // Clean up the reader div
@@ -141,14 +147,12 @@ const scanner = {
     },
     
     pause() {
-        if (isScanning) {
-            Quagga.pause();
-        }
+        isScanEnabled = false;
     },
     
     resume() {
-        if (isScanning) {
-            Quagga.start();
-        }
+        isScanEnabled = true;
+        // Reset last result so re-scanning the same barcode works
+        lastResult = null;
     }
 };
