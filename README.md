@@ -12,16 +12,23 @@ Home food inventory tracker with barcode scanning.
 
 ## Running locally
 
+From the repo root:
+
 ```bash
-cd backend
-uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+make serve
 ```
 
 Then open http://localhost:8000 in your browser.
 
-To access from your phone on the same network, use your Mac's local IP (e.g., http://192.168.1.x:8000).
+For phone/camera testing, use Tailscale HTTPS:
 
-> **Note:** Camera access requires HTTPS on most browsers. For local development on the same device, localhost works. For phone access, you may need to use a tunnel or accept the security warning.
+```bash
+make serve-ts
+```
+
+The command prints the https://<your-hostname>.ts.net URL to open on your phone.
+
+> **Note:** Camera access on phones requires HTTPS; plain HTTP on a local IP won’t work.
 
 ## Project structure
 
